@@ -45,7 +45,7 @@ class DeletePost(unittest.TestCase):
     def test_deletePost_02(self):
         """
         验证不能删除已删除的帖子
-        step1: 随机选择一篇帖子
+        step1: 随机选择一篇已删除帖子
         step2: 调用/post/consumer/deletePost接口
         """
         sql = f"select id from t_post where post_state=0 and user_id='{self.user_id}' ORDER BY RAND() limit 1"
@@ -61,7 +61,7 @@ class DeletePost(unittest.TestCase):
     def test_deletePost_03(self):
         """
         验证不能删除他人发布的帖子
-        step1: 随机选择一篇帖子
+        step1: 随机选择一篇他人发布的帖子
         step2: 调用/post/consumer/deletePost接口
         """
         sql = f"select id from t_post where post_state=2 and user_id!='{self.user_id}' ORDER BY RAND() limit 1"
@@ -75,7 +75,7 @@ class DeletePost(unittest.TestCase):
     def test_deletePost_04(self):
         """
         验证不能删除待审核的帖子
-        step1: 随机选择一篇帖子
+        step1: 随机选择一篇待审核的帖子
         step2: 调用/post/consumer/deletePost接口
         """
         sql = f"select id from t_post where post_state=1 and user_id='{self.user_id}' ORDER BY RAND() limit 1"
@@ -99,7 +99,7 @@ class DeletePost(unittest.TestCase):
         db.executeSQL(sql)
         post_id = db.get_one()
         if not post_id:
-            return self.skipTest("查询当前用户无加精的帖子，当前用例不涉及")
+            return self.skipTest("查询当前用户无加精的帖子，此用例不涉及")
         self.data['postId'] = post_id["id"]
         self.res = self.my_request_post()
         self.assertFalse(self.res['success'])
@@ -116,7 +116,7 @@ class DeletePost(unittest.TestCase):
         db.executeSQL(sql)
         post_id = db.get_one()
         if not post_id:
-            return self.skipTest("查询当前用户无置顶的帖子，当前用例不涉及")
+            return self.skipTest("查询当前用户无置顶的帖子，此用例不涉及")
         self.data['postId'] = post_id["id"]
         self.res = self.my_request_post()
         self.assertFalse(self.res['success'])

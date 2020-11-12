@@ -8,6 +8,7 @@ from TestCase import test_009_DeletePost
 from TestCase.test_005_Collection_Like import CollectionLike
 from common.create_auth import check_set_token
 from common.mock import get_now_minute
+from common.readConfig import ReadConfig
 
 current_path = os.getcwd()  # 获取当前路径
 case_path = os.path.join(current_path, "TestCase")  # 设置用例路径
@@ -15,6 +16,7 @@ report_path = os.path.join(current_path, "Report")  # 设置报告存放路径
 if not report_path:
     os.mkdir(report_path)
 check_set_token()  # 查询token并写入配置文件
+localReadConfig = ReadConfig()
 
 
 # 加载测试用例
@@ -48,8 +50,9 @@ def run():
     #                         title='自动化测试报告',
     #                         description='测试用例执行详情')
     # result = runner.run(load_all_case())
-    BeautifulReport(load_all_case()).report(description='论坛接口', filename=get_now_minute() + 'result.html',
-                                            report_dir=report_path, theme='theme_candy')
+    BeautifulReport(load_all_case()).report(description=f'论坛接口 （测试用户：{localReadConfig.get_account("nickName")}）',
+                                            filename=get_now_minute() + 'result.html', report_dir=report_path,
+                                            theme='theme_candy')
 
     # fp.close()
     # print("总用例数：", result.testsRun)

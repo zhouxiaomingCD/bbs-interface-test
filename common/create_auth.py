@@ -13,7 +13,7 @@ port = localReadConfig.get_redis("port")
 
 
 def run_server():
-    cmd = 'java -jar ./tools/demo-0.0.1-SNAPSHOT.jar'
+    cmd = 'java -jar ./tools/demo-0.0.2-SNAPSHOT.jar'
     os.system(cmd)
 
 
@@ -26,7 +26,7 @@ def create_gwt():
     t1 = threading.Thread(target=run_server, daemon=True)
     t1.start()
     time.sleep(15)
-    url = "http://127.0.0.1:8080/getJwts"
+    url = "http://127.0.0.1:8888/getJwts"
     res = requests.get(url)
     print(res.status_code)
 
@@ -55,6 +55,7 @@ def write_userId(token):
     nickName = userInfo['nickName']
     print("操作用户：", nickName)
     localReadConfig.set_account("user_id", userId)
+    localReadConfig.set_account("nickName", nickName)
 
 
 def solve_login_bug(token):
