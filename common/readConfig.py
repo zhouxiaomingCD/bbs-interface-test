@@ -36,7 +36,7 @@ class ReadConfig:
 
     def set_account(self, name, value):
         self.cf.set("ACCOUNT", name, value)
-        with open(configPath, 'w+') as f:
+        with open(configPath, 'w+',encoding="utf-8") as f:
             self.cf.write(f)
 
     def get_headers(self, name):
@@ -45,7 +45,7 @@ class ReadConfig:
 
     def set_headers(self, name, value):
         self.cf.set("HEADERS", name, value)
-        with open(configPath, 'w+') as f:
+        with open(configPath, 'w+', encoding="Utf-8") as f:
             self.cf.write(f)
 
     def get_url(self, name):

@@ -1,5 +1,5 @@
 import os
-import threading
+from multiprocessing import Process
 import time
 import requests
 import redis
@@ -23,9 +23,9 @@ def create_gwt():
     2、访问接口地址，后台自动写入redis数据库
     :return:
     """
-    t1 = threading.Thread(target=run_server, daemon=True)
-    t1.start()
-    time.sleep(15)
+    p1 = Process(target=run_server, daemon=True)
+    p1.start()
+    time.sleep(20)
     url = "http://127.0.0.1:8888/getJwts"
     res = requests.get(url)
     print(res.status_code)
