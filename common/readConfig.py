@@ -9,16 +9,16 @@ configPath = os.path.join(proDir, "conf/config.ini")
 
 class ReadConfig:
     def __init__(self):
-        fd = open(configPath)
-        data = fd.read()
-
-        #  remove BOM
-        if data[:3] == codecs.BOM_UTF8:
-            data = data[3:]
-            file = codecs.open(configPath, "w")
-            file.write(data)
-            file.close()
-        fd.close()
+        # fd = open(configPath, "r")
+        # data = fd.read()
+        # print(data)
+        # #  remove BOM
+        # if data[:3] == codecs.BOM_UTF8:
+        #     data = data[3:]
+        #     file = codecs.open(configPath, "w")
+        #     file.write(data)
+        #     file.close()
+        # fd.close()
 
         self.cf = configparser.ConfigParser()
         self.cf.read(configPath)
