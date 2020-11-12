@@ -17,6 +17,7 @@ class StartVote(unittest.TestCase):
         初始化，重置参数
         """
         self.data = {"optionIds": [], "postId": "", "voteId": ""}
+        self.res = {}
         print("请求头：", self.headers)
 
     def tearDown(self):
@@ -88,9 +89,7 @@ class StartVote(unittest.TestCase):
         li_for_all, li_for_voted = self.get_all_voted_ids(0)
         post_ids = list(set(li_for_all) ^ set(li_for_voted))  # 列表求差得到可以投票的帖子
         if not post_ids:
-            print("已没有可供该用户投票的帖子")
-            self.res = None
-            return
+            return self.skipTest("已没有可供该用户投票的帖子,此用例不涉及")
         choose_post_id = random.choice(post_ids)
         print('获取其他可投票帖子的所有选项id和投票id')
         sql3 = f"select id,vote_id from t_vote_option where post_id!='{choose_post_id}'"
@@ -117,9 +116,7 @@ class StartVote(unittest.TestCase):
         """
         li_for_all, li_for_voted = self.get_all_voted_ids(0)
         if not li_for_voted:
-            print("该用户暂时没有参与过任何投票")
-            self.res = None
-            return
+            return self.skipTest("该用户暂时没有参与过任何投票")
         choose_post_id = random.choice(li_for_voted)
         print('获取该帖子的所有选项id和投票id')
         sql3 = f"select id,vote_id from t_vote_option where post_id='{choose_post_id}'"
@@ -148,9 +145,7 @@ class StartVote(unittest.TestCase):
         li_for_all, li_for_voted = self.get_all_voted_ids(0)
         post_ids = list(set(li_for_all) ^ set(li_for_voted))  # 列表求差得到可以投票的帖子
         if not post_ids:
-            print("已没有可供该用户投票的帖子")
-            self.res = None
-            return
+            return self.skipTest("已没有可供该用户投票的帖子,此用例不涉及")
         choose_post_id = random.choice(post_ids)
         print('获取该帖子的所有选项id和投票id')
         sql3 = f"select id,vote_id from t_vote_option where post_id='{choose_post_id}'"
@@ -180,9 +175,7 @@ class StartVote(unittest.TestCase):
         li_for_all, li_for_voted = self.get_all_voted_ids(1)
         post_ids = list(set(li_for_all) ^ set(li_for_voted))  # 列表求差得到可以投票的帖子
         if not post_ids:
-            print("已没有可供该用户投票的帖子")
-            self.res = None
-            return
+            return self.skipTest("已没有可供该用户投票的帖子,此用例不涉及")
         choose_post_id = random.choice(post_ids)
         print('获取该帖子的所有选项id和投票id')
         sql3 = f"select v1.id,v1.vote_id,v2.optional_num from t_vote_option v1,t_vote v2 where v2.id=v1.vote_id and" \
@@ -214,9 +207,7 @@ class StartVote(unittest.TestCase):
         li_for_all, li_for_voted = self.get_all_voted_ids(1)
         post_ids = list(set(li_for_all) ^ set(li_for_voted))  # 列表求差得到可以投票的帖子
         if not post_ids:
-            print("已没有可供该用户投票的帖子")
-            self.res = None
-            return
+            return self.skipTest("已没有可供该用户投票的帖子,此用例不涉及")
         choose_post_id = random.choice(post_ids)
         print('获取该帖子的所有选项id和投票id')
         sql3 = f"select v1.id,v1.vote_id,v2.optional_num from t_vote_option v1,t_vote v2 where v2.id=v1.vote_id and" \
@@ -229,9 +220,7 @@ class StartVote(unittest.TestCase):
         vote_id = result[0]["vote_id"]
         optional_num = result[0]["optional_num"]
         if optional_num == len(option_ids):
-            print("该贴子为全选，此条用例忽略")
-            self.res = None
-            return
+            return self.skipTest("该贴子为全选，此条用例忽略")
         self.data["optionIds"] = random.sample(option_ids, optional_num + 1)
         self.data["postId"] = choose_post_id
         self.data["voteId"] = vote_id
@@ -252,9 +241,7 @@ class StartVote(unittest.TestCase):
         li_for_all, li_for_voted = self.get_all_voted_ids(1)
         post_ids = list(set(li_for_all) ^ set(li_for_voted))  # 列表求差得到可以投票的帖子
         if not post_ids:
-            print("已没有可供该用户投票的帖子")
-            self.res = None
-            return
+            return self.skipTest("已没有可供该用户投票的帖子,此用例不涉及")
         choose_post_id = random.choice(post_ids)
         print('获取该帖子的所有选项id和投票id')
         sql3 = f"select v1.id,v1.vote_id,v2.optional_num from t_vote_option v1,t_vote v2 where v2.id=v1.vote_id and" \

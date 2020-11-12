@@ -17,6 +17,7 @@ class DeletePost(unittest.TestCase):
         初始化，重置参数
         """
         self.data = {"postId": ""}
+        self.res = None
 
     def tearDown(self):
         print("请求参数：", self.data)
@@ -35,9 +36,7 @@ class DeletePost(unittest.TestCase):
         db.executeSQL(sql)
         post_id = db.get_one()
         if not post_id:
-            print("此用户暂未发布过帖子，当前用例不涉及")
-            self.res = None
-            return
+            return self.skipTest("此用户暂未发布过帖子，当前用例不涉及")
         self.data['postId'] = post_id["id"]
         self.res = self.my_request_post()
         self.assertTrue(self.res['success'])
@@ -53,9 +52,7 @@ class DeletePost(unittest.TestCase):
         db.executeSQL(sql)
         post_id = db.get_one()
         if not post_id:
-            print("查询无帖子，当前用例不涉及")
-            self.res = None
-            return
+            return self.skipTest("该用户没有已被删除的帖子，此用例不涉及")
         self.data['postId'] = post_id["id"]
         self.res = self.my_request_post()
         self.assertFalse(self.res['success'])
@@ -67,13 +64,9 @@ class DeletePost(unittest.TestCase):
         step1: 随机选择一篇帖子
         step2: 调用/post/consumer/deletePost接口
         """
-        sql = f"select id from t_post where post_state=0 and user_id!='{self.user_id}' ORDER BY RAND() limit 1"
+        sql = f"select id from t_post where post_state=2 and user_id!='{self.user_id}' ORDER BY RAND() limit 1"
         db.executeSQL(sql)
         post_id = db.get_one()
-        if not post_id:
-            print("查询无帖子，当前用例不涉及")
-            self.res = None
-            return
         self.data['postId'] = post_id["id"]
         self.res = self.my_request_post()
         self.assertFalse(self.res['success'])
@@ -81,7 +74,7 @@ class DeletePost(unittest.TestCase):
 
     def test_deletePost_04(self):
         """
-        验证不能删除他人发布的帖子
+        验证不能删除待审核的帖子
         step1: 随机选择一篇帖子
         step2: 调用/post/consumer/deletePost接口
         """
@@ -89,9 +82,7 @@ class DeletePost(unittest.TestCase):
         db.executeSQL(sql)
         post_id = db.get_one()
         if not post_id:
-            print("查询无帖子，当前用例不涉及")
-            self.res = None
-            return
+            return self.skipTest('查询无待审核的帖子，当前用例不涉及')
         self.data['postId'] = post_id["id"]
         self.res = self.my_request_post()
         self.assertFalse(self.res['success'])
@@ -100,16 +91,15 @@ class DeletePost(unittest.TestCase):
     def test_deletePost_05(self):
         """
         验证不能删除加精的帖子
-        step1: 随机选择一篇帖子
+        step1: 随机选择一篇当前用户加精的帖子
         step2: 调用/post/consumer/deletePost接口
         """
-        sql = f"select id from t_post where post_state=2 and is_high_quality=1 and user_id='{self.user_id}' ORDER BY RAND() limit 1"
+        sql = f"select id from t_post where post_state=2 and is_high_quality=1 and user_id='{self.user_id}' ORDER BY " \
+              f"RAND() limit 1"
         db.executeSQL(sql)
         post_id = db.get_one()
         if not post_id:
-            print("查询当前用户无加精的帖子，当前用例不涉及")
-            self.res = None
-            return
+            return self.skipTest("查询当前用户无加精的帖子，当前用例不涉及")
         self.data['postId'] = post_id["id"]
         self.res = self.my_request_post()
         self.assertFalse(self.res['success'])
@@ -118,16 +108,15 @@ class DeletePost(unittest.TestCase):
     def test_deletePost_06(self):
         """
         验证不能删除置顶的帖子
-        step1: 随机选择一篇帖子
+        step1: 随机选择一篇当前用户置顶的帖子
         step2: 调用/post/consumer/deletePost接口
         """
-        sql = f"select id from t_post where post_state=1 and is_toped=1 and user_id='{self.user_id}' ORDER BY RAND() limit 1"
+        sql = f"select id from t_post where post_state=1 and is_toped=1 and user_id='{self.user_id}' ORDER BY RAND() " \
+              f"limit 1"
         db.executeSQL(sql)
         post_id = db.get_one()
         if not post_id:
-            print("查询当前用户无置顶的帖子，当前用例不涉及")
-            self.res = None
-            return
+            return self.skipTest("查询当前用户无置顶的帖子，当前用例不涉及")
         self.data['postId'] = post_id["id"]
         self.res = self.my_request_post()
         self.assertFalse(self.res['success'])

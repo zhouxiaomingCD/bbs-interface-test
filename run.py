@@ -4,7 +4,7 @@ from BeautifulReport import BeautifulReport
 from unittest import TestSuite
 import os
 import time
-from TestCase import test_014_User_getCollectionList
+from TestCase import test_009_DeletePost
 from TestCase.test_005_Collection_Like import CollectionLike
 from common.create_auth import check_set_token
 from common.mock import get_now_minute
@@ -27,7 +27,7 @@ def load_all_case():
 
 # def load_all_case():
 #     # (模块名)但是我看源码提示是说在3.5已经移除使用，那就不用这个了
-#     discover = unittest.defaultTestLoader.loadTestsFromModule(test_014_User_getCollectionList)
+#     discover = unittest.defaultTestLoader.loadTestsFromModule(test_009_DeletePost)
 #     return discover
 
 
