@@ -12,7 +12,8 @@ from common.mock import get_now_minute
 current_path = os.getcwd()  # 获取当前路径
 case_path = os.path.join(current_path, "TestCase")  # 设置用例路径
 report_path = os.path.join(current_path, "Report")  # 设置报告存放路径
-
+if not report_path:
+    os.mkdir(report_path)
 check_set_token()  # 查询token并写入配置文件
 
 
