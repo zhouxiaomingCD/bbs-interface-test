@@ -1,10 +1,11 @@
 import os
-from multiprocessing import Process
+from threading import Thread
 import time
 import requests
 import redis
 import common.readConfig as readConfig
 import random
+import platform
 
 localReadConfig = readConfig.ReadConfig()
 host = localReadConfig.get_redis("host")
@@ -17,15 +18,36 @@ def run_server():
     os.system(cmd)
 
 
+def kill_java():
+    """
+    杀死java进程，保证程序终端顺利退出
+    """
+    time.sleep(20)
+    if platform.system() == 'Windows':
+        print('Windows系统')
+        cmd1 = 'netstat -ano|findstr 8888'
+        print(cmd1)
+        res = os.popen(cmd1).readline()
+        print(res)
+        pid = res.split()[-1]
+        cmd2 = 'tskill %s' % pid
+        os.system(cmd2)
+    if platform.system() == 'Linux':
+        cmd = "kill -9 $(netstat -tlnp|grep 8888|awk  '{print $7}'|awk -F '/' '{print $1}')"
+        os.system(cmd)
+
+
 def create_gwt():
     """
     1、启动一个线程启用服务
     2、访问接口地址，后台自动写入redis数据库
     :return:
     """
-    p1 = Process(target=run_server, daemon=True)
-    p1.start()
-    time.sleep(20)
+    t1 = Thread(target=run_server)
+    t2 = Thread(target=kill_java)
+    t1.start()
+    t2.start()
+    t2.join()
     url = "http://127.0.0.1:8888/getJwts"
     res = requests.get(url)
     print(res.status_code)
