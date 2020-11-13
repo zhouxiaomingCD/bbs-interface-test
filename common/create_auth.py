@@ -22,7 +22,6 @@ def kill_java():
     """
     杀死java进程，保证程序终端顺利退出
     """
-    time.sleep(20)
     if platform.system() == 'Windows':
         print('Windows系统')
         cmd1 = 'netstat -ano|findstr 8888'
@@ -30,7 +29,7 @@ def kill_java():
         res = os.popen(cmd1).readline()
         print(res)
         pid = res.split()[-1]
-        cmd2 = 'tskill %s' % pid
+        cmd2 = f'taskkill /f /t /im {pid}'
         os.system(cmd2)
     if platform.system() == 'Linux':
         cmd = "kill -9 $(netstat -tlnp|grep 8888|awk  '{print $7}'|awk -F '/' '{print $1}')"
@@ -44,13 +43,12 @@ def create_gwt():
     :return:
     """
     t1 = Thread(target=run_server)
-    t2 = Thread(target=kill_java)
     t1.start()
-    t2.start()
-    t2.join()
+    time.sleep(15)
     url = "http://127.0.0.1:8888/getJwts"
     res = requests.get(url)
     print(res.status_code)
+    kill_java()
 
 
 def write_token(result, conn):
