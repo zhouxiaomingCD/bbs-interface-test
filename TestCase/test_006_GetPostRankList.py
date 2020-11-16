@@ -6,7 +6,6 @@ from common.mock import *
 class GetPostRankList(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-
         cls.getPostRankList = base_url + '/post/getPostRankList'
 
     def setUp(self):
@@ -50,7 +49,6 @@ class GetPostRankList(unittest.TestCase):
         step3：获取数据库查询结果
         step4：比较接口返回数据和数据库查询数据是否一致，排序是否一致
         """
-
         self.data["rankState"] = 2
         self.res = self.my_request_post()
         sql = "select id from t_post where post_state = 2 order by read_count desc limit 10"
